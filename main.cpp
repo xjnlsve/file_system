@@ -7,6 +7,30 @@
 #include <Windows.h>
 
 using namespace std;
+struct Node{
+public:
+    vector<string>* files;
+    vector<Node*>* directories;
+    string name;
+    string fullPath;
+
+    explicit Node(string name, string full_path) : name(std::move(name)), fullPath(std::move(full_path)) {
+        files = new vector<string>();
+        directories = new vector<Node*>();
+    }
+
+    void parse(){
+        parse(name, 0);
+    }
+
+
+private:
+    void parse(const string& path, int nesting){
+
+    }
+
+
+};
 
 
 
@@ -42,6 +66,8 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    Node* first = new Node(path, path);
+    first->parse();
 
 
     return 0;
