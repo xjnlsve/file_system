@@ -42,10 +42,27 @@ private:
 
 
 };
-
-
-
 int countThreads = 0;
+
+void find_file(Node* node, string fileName){
+    for(const string& file : *node->files){
+        if(fileName != file)
+            continue;
+        cout << "файл найден: " << node->fullPath << fileName << endl;
+    }
+
+    for(Node *item : *node->directories){
+        if(countThreads > 0){
+            countThreads--;
+            thread(find_file, item, fileName).detach();
+        }
+        else
+            find_file(item, fileName);
+    }
+}
+
+
+
 
 
 
@@ -80,6 +97,10 @@ int main(int argc, char* argv[]) {
     Node* first = new Node(path, path);
     first->parse();
 
+    find_file(first, filename);
+    while (countThreads != 0){
+        this_thread::sleep_for(chrono::milliseconds(100));
+    }
 
     return 0;
 }
