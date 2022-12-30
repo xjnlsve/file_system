@@ -26,7 +26,18 @@ public:
 
 private:
     void parse(const string& path, int nesting){
-
+        for(const auto& file : filesystem::directory_iterator(path))
+        {
+            for(int i = 0; i < nesting; i++) cout << "\t";
+            cout << file.path().filename() << endl;
+            if(filesystem::is_directory(file)) {
+                Node* node = new Node(file.path().filename().string(), file.path().string());
+                directories->push_back(node);
+                node->parse(file.path().string(), nesting + 1);
+            }
+            else
+                files->push_back(file.path().filename().string());
+        }
     }
 
 
